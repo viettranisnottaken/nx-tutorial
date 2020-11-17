@@ -1,25 +1,32 @@
 <nav class="system-navigator">
-    <button class="btn" (click)="toggleMenu()">
-        <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#8b8b8b" width="30px" height="30px">
-            <path d="M0 0h24v24H0V0z" fill="none" />
-            <path
-                d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"
-            />
-        </svg>
-    </button>
-    <div #menu class="menu" [ngClass]="{ 'menu--hidden': !isMenuOpen }">
-        <ul class="menu__items">
-            <li *ngFor="let appUrl of appUrls" class="menu__item">
-                <a class="content" [href]="appUrl.url">
-                    <ng-container *ngIf="!appUrl.image; else hasImage">
-                        <div class="placeholder-logo">{{ appUrl.name | initials }}</div>
-                    </ng-container>
-                    <ng-template #hasImage>
-                        <img class="avatar" [src]="appUrl.image" [alt]="appUrl.name" />
-                    </ng-template>
-                    <span class="name">{{ appUrl.name | titlecase }}</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+  <button class="btn" (click)="toggleMenu()">
+    <svg
+      class="menu-icon"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="#8b8b8b"
+      width="30px"
+      height="30px"
+    >
+      <path d="M0 0h24v24H0V0z" fill="none" />
+      <path
+        d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"
+      />
+    </svg>
+  </button>
+  <div #menu class="menu" [ngClass]="{ 'menu--hidden': !isMenuOpen }">
+    <ul class="menu__items">
+      <li *ngFor="let appUrl of inputAppUrls | async" class="menu__item">
+        <a class="content" [href]="appUrl.url">
+          <ng-container *ngIf="!appUrl.image; else hasImage">
+            <div class="placeholder-logo">{{ appUrl.name | initials }}</div>
+          </ng-container>
+          <ng-template #hasImage>
+            <img class="avatar" [src]="appUrl.image" [alt]="appUrl.name" />
+          </ng-template>
+          <span class="name">{{ appUrl.name | titlecase }}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
 </nav>

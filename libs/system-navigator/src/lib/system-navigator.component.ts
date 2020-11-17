@@ -1,53 +1,43 @@
 import { Component, ElementRef, HostListener, Input, OnInit } from '@angular/core';
 import { SystemNavigatorService } from './system-navigator.service';
-import { AppUrl, ServerResponse } from './models';
+import { AppUrl } from './models';
+import { Observable } from 'rxjs';
 
 @Component({
-    selector: 'lib-system-navigator',
-    templateUrl: './system-navigator.component.html',
-    styleUrls: ['./system-navigator.component.scss'],
+  selector: 'lib-system-navigator',
+  templateUrl: './system-navigator.component.html',
+  styleUrls: ['./system-navigator.component.scss'],
 })
 export class SystemNavigatorComponent implements OnInit {
-    @Input() inputAppUrls: AppUrl[];
+  @Input() inputAppUrls: Observable<AppUrl[]>;
 
-    appUrls: AppUrl[];
-    isMenuOpen = false;
+  isMenuOpen = false;
 
-    @HostListener('document:click', ['$event'])
-    onDocumentClick(event): void {
-        if (!this.eRef.nativeElement.contains(event.target)) {
-            this.isMenuOpen = false;
-        }
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event): void {
+    if (!this.eRef.nativeElement.contains(event.target)) {
+      this.isMenuOpen = false;
     }
+  }
 
-    @HostListener('document:keyup.escape', ['$event'])
-    onEscKeyUp(event: KeyboardEvent) {
-        this.isMenuOpen = false;
+  @HostListener('document:keyup.escape', ['$event'])
+  onEscKeyUp(event: KeyboardEvent) {
+    this.isMenuOpen = false;
+  }
+
+  constructor(private service: SystemNavigatorService, private eRef: ElementRef) {}
+
+  ngOnInit(): void {
+    if (this.service.api) {
+      this.getUrls();
     }
+  }
 
-    constructor(private service: SystemNavigatorService, private eRef: ElementRef) {}
+  getUrls(): void {
+    this.inputAppUrls = this.service.getUrls();
+  }
 
-    ngOnInit(): void {
-        this.getUrls();
-    }
-
-    getUrls(): void {
-        if (this.inputAppUrls) {
-            this.appUrls = this.inputAppUrls;
-            return;
-        }
-
-        this.service.getUrls().subscribe(
-            (res: ServerResponse) => {
-                this.appUrls = res.data;
-            },
-            (err) => {
-                console.error(err);
-            }
-        );
-    }
-
-    toggleMenu(): void {
-        this.isMenuOpen = !this.isMenuOpen;
-    }
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 }

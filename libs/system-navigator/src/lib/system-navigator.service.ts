@@ -25,7 +25,7 @@ export class SystemNavigatorService {
     }
   }
 
-  getUrls(): Observable<ServerResponse> {
+  getUrls(): Observable<AppUrl[]> {
     const headers = new HttpHeaders(this.headers);
 
     return this.http
@@ -38,7 +38,7 @@ export class SystemNavigatorService {
             return appUrl;
           });
 
-          return res;
+          return res.data;
         })
       );
   }
